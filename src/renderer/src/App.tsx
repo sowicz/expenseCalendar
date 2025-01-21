@@ -14,16 +14,17 @@ const data  = {
 
 
 function App(): JSX.Element {
-  const [clickedDay, setClickedDay] = useState(0);
-
+  // const [notification, setNotification] = useState<string>('');
+  
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping');
 
 
   const highlightedDays = [3, 7, 15, 23]; 
-  const handleDayClick = (day: number) => {
-    alert(`Kliknięto dzień: ${day}`);
-    setClickedDay(day);
-  };
+  // const handleDayClick = (day: number) => {
+  //   console.log(`Kliknięto dzień: ${day}`);
+  // };
+
+
   return (
     <div className="relative w-screen h-screen px-4 py-8">
 
@@ -41,7 +42,7 @@ function App(): JSX.Element {
 
       {/* Calendar */}
       <div id="calendar" className="absolute top-8 right-8 2xl:right-32">
-        <Calendar highlightedDays={highlightedDays} onDayClick={handleDayClick} />
+        <Calendar highlightedDays={highlightedDays} />
       </div>
 
       {/*  */}
@@ -55,7 +56,7 @@ function App(): JSX.Element {
           />
         </div>
         <div id="expenseForm" className="xl:mr-24 xl:mt-16 mt-4">
-          <ExpenseForm clickedDay={clickedDay}/>
+          <ExpenseForm />
         </div>
       </div>
     </div>

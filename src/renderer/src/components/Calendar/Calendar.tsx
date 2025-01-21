@@ -11,8 +11,7 @@ const nameOfDays: string[] = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So', 'Nd'];
 
 
 
-
-function Calendar({highlightedDays, onDayClick}:CalendarProps): JSX.Element {
+function Calendar({highlightedDays}:CalendarProps): JSX.Element {
 
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
   const [isMonthPickerOpen, setMonthPickerOpen] = useState(false); // Stan do obsługi menu wyboru miesiąca
@@ -29,6 +28,7 @@ function Calendar({highlightedDays, onDayClick}:CalendarProps): JSX.Element {
     setCurrentDate(currentDate.month(month));
     setMonthPickerOpen(false); 
   };
+
 
   return (
     <div className="max-w-md ">
@@ -81,12 +81,12 @@ function Calendar({highlightedDays, onDayClick}:CalendarProps): JSX.Element {
           return (
             <div
               key={day}
-              onClick={() => onDayClick?.(day)}
-              className={`flex items-center justify-center p-2 rounded-md cursor-pointer
+              // onClick={() => onDayClick?.(day)}
+              className={`flex items-center justify-center p-2 rounded-md 
                 ${
                   isHighlighted
                     ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 text-gray-900 hover:bg-blue-100 '
+                    : 'bg-gray-100 text-gray-900 '
                 }`}
             >
               {day}

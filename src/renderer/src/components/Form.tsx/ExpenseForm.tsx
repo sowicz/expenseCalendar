@@ -1,6 +1,6 @@
 import { useState, FormEvent } from 'react';
 
-function ExpenseForm({clickedDay}): JSX.Element {
+function ExpenseForm({}): JSX.Element {
   const [description, setDescription] = useState('');
   const [expense, setExpense] = useState('');
   const [choice, setChoice] = useState('yearly');
@@ -10,7 +10,7 @@ function ExpenseForm({clickedDay}): JSX.Element {
     e.preventDefault();
 
     if (!description || !expense || !startDate) {
-      alert('All fields are required!');
+      console.log('All fields are required!');
       return;
     }
 
@@ -42,7 +42,7 @@ function ExpenseForm({clickedDay}): JSX.Element {
   const handleDelete = () => {
     const confirmDelete = window.confirm('Are you sure you want to delete this record?');
     if (confirmDelete) {
-      alert('Deleted successfully (implement backend logic here).');
+      console.log('Deleted successfully (implement backend logic here).');
       // Implement delete logic if needed
     }
   };
@@ -66,7 +66,7 @@ function ExpenseForm({clickedDay}): JSX.Element {
       <div className="flex space-x-4">
         <div>
           <label htmlFor="expense" className="block text-sm font-medium">
-            Expense
+            Expense Amount
           </label>
           <input
             id="expense"
@@ -80,7 +80,7 @@ function ExpenseForm({clickedDay}): JSX.Element {
 
         <div>
           <label htmlFor="choice" className="block text-sm font-medium">
-            Interval
+            Payment Type
           </label>
           <select
             id="choice"
@@ -96,13 +96,12 @@ function ExpenseForm({clickedDay}): JSX.Element {
 
         <div>
           <label htmlFor="startDate" className="block text-sm font-medium">
-            Date
+            Start Date
           </label>
           <input
             id="startDate"
             type="date"
-            // value={startDate}
-            value={clickedDay}
+            value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             className="mt-2 w-full p-2 border rounded text-slate-700"
           />
