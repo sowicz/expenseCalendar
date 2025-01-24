@@ -1,31 +1,49 @@
 import { useState, FormEvent } from 'react';
 
-function ExpenseForm({}): JSX.Element {
+interface Props {
+  showNotification: (msg: string) => void; 
+  submitExpense: (expense: ExpenseToAdd) => void; 
+}
+
+interface ExpenseToAdd {
+  description: string;
+  amount: number;
+  interval: string;
+  startDate: Date;
+}
+
+
+function ExpenseForm({submitExpense, showNotification}: Props): JSX.Element {
   const [description, setDescription] = useState('');
   const [expense, setExpense] = useState('');
   const [choice, setChoice] = useState('yearly');
   const [startDate, setStartDate] = useState('');
 
+
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     if (!description || !expense || !startDate) {
-      console.log('All fields are required!');
+      showNotification('All fields are required!');
       return;
     }
 
-    // Prepare the data to send
-    const expenseData = {
-      description,
-      expense: parseFloat(expense),
-      choice,
-      startDate,
-    };
+    try {
+      const expenseToAdd: ExpenseToAdd = {
+        description,
+        amount: parseFloat(expense), // Konwersja do liczby
+        interval: choice,
+        startDate: new Date(startDate) // Konwersja do obiektu Date
+      };
 
-    // Send data to the Electron backend
-    // window.electronAPI.sendExpense(expenseData);
+      submitExpense(expenseToAdd); 
+      showNotification('Expense submitted successfully!'); 
+    } catch (error) {
+      showNotification('An error occurred while submitting the expense.');
+    }
 
-    // Reset the form
+    // Reset formularza
     setDescription('');
     setExpense('');
     setChoice('yearly');
@@ -37,15 +55,13 @@ function ExpenseForm({}): JSX.Element {
     setExpense('');
     setChoice('yearly');
     setStartDate('');
+    showNotification('Form cleared.');
   };
 
   const handleDelete = () => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this record?');
-    if (confirmDelete) {
-      console.log('Deleted successfully (implement backend logic here).');
-      // Implement delete logic if needed
-    }
+    showNotification('Deleted successfully!');
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-4 rounded shadow-md max-w-md mx-auto">

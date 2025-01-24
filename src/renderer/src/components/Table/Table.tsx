@@ -67,7 +67,7 @@ function Table(): JSX.Element {
             <th className="px-4 py-2 text-left text-sm font-semibold max-w-[180px]">Description</th>
             <th className="px-4 py-2 text-left text-sm font-semibold min-w-[60px]">Price</th>
             <th className="px-4 py-2 text-left text-sm font-semibold min-w-[120px]">Payment Day</th>
-            <th className="px-4 py-2 text-left text-sm font-semibold min-w-[80px]">OneTime</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold min-w-[80px]">Interval</th>
             <th className="px-4 py-2 text-left text-sm font-semibold min-w-[50px]">Edit</th>
           </tr>
         </thead>
@@ -79,7 +79,7 @@ function Table(): JSX.Element {
               </td>
               <td className="px-4 py-2 text-sm">{item.price.toFixed(2)}</td>
               <td className="px-4 py-2 text-sm">{item.payment_day}</td>
-              <td className="px-4 py-2 text-sm">{item.one_time_pay ? 'Yes' : ''}</td>
+              <td className="px-4 py-2 text-sm">{item.one_time_pay}</td>
               <td className="px-4 py-2 text-sm">click</td>
             </tr>
           ))}

@@ -1,7 +1,12 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { app, shell, BrowserWindow, ipcMain } from 'electron';
+import path,{ join } from 'path';
+import { electronApp, optimizer, is } from '@electron-toolkit/utils';
+import { createObjectCsvWriter } from "csv-writer";
 import icon from '../../resources/icon.png?asset'
+import fs from "fs";
+
+
+
 
 function createWindow(): void {
   // Create the browser window.
@@ -45,24 +50,59 @@ app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
 
+  // handle path and logic to save in csv
+  const csvFilePath = path.join(__dirname, './expenses.csv');
 
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
+
+  // config `csv-writer`
+  const csvWriter = createObjectCsvWriter({
+    path: csvFilePath,
+    header: [
+      { id: "description", title: "Description" },
+      { id: "amount", title: "Amount" },
+      { id: "interval", title: "Interval" },
+      { id: "startDate", title: "Start_date" },
+    ],
+    append: true,
+  });
+
+  // check if file exist
+  // Add header when create file
+  const doesCsvExist = fs.existsSync(csvFilePath);
+  if (!doesCsvExist) {
+    fs.writeFileSync(
+      csvFilePath,
+      "Description,Amount,Interval,Start Date\n",
+      "utf8"
+    );
+  }
+
+  // IPC Linstener
+  // change "ping" to 'add-expense'
+  ipcMain.on("ping", async (event, expense) => {
+    try {
+      // BACKEND LOGIN TO DO  
+      await csvWriter.writeRecords([expense]);
+      console.log("Save expense:", expense);
+
+      event.sender.send("expense-status", { status: "success", message: "Expense saved successfully!" });
+    } catch (error) {
+      event.sender.send("expense-status", { status: "error", message: "Failed to save expense." });
+    }
+  });
+
+
 
   ipcMain.on('sendFromIPC', (event) => {
     const data = { message: 'Hello from Main Process!' };
     event.reply('data-from-main', data);  // Wysyłanie danych do renderer
   });
-
-
 
 
 
@@ -74,6 +114,8 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
+// END createWindow function
+
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
