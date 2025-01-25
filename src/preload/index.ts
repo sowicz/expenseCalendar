@@ -9,7 +9,7 @@ import { contextBridge, ipcRenderer  } from 'electron'
 // just add to the DOM global.
 // if (process.contextIsolated) {
 //   try {
-//     contextBridge.exposeInMainWorld('electron', electronAPI)
+//     // contextBridge.exposeInMainWorld('electron', electronAPI)
 //     contextBridge.exposeInMainWorld('api', api)
 //   } catch (error) {
 //     console.error(error)
@@ -25,5 +25,8 @@ contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
     send: (channel, data) => ipcRenderer.send(channel, data),
     on: (channel, callback) => ipcRenderer.on(channel, callback),
-  }
+    onReceiveCSVData: (callback) => {
+      ipcRenderer.on("send-expenses", (_, data) => callback(data)); // Pass only the `data` argument
+    },
+  },
 });

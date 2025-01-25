@@ -30,10 +30,10 @@ function App(): JSX.Element {
   // Backend communication handling
   const submitExpense = (expense: ExpenseToAdd): void => {
     try {
-      console.log(expense)
-      window.electron.ipcRenderer.send("ping", expense);
+      // console.log(expense)
+      window.electron.ipcRenderer.send("add-expense", expense);
     } catch (error) {
-      showNotification("An error occurred while sending IPC.");
+      showNotification("An error occurred while adding.");
     }
   };
 
@@ -63,7 +63,7 @@ function App(): JSX.Element {
         <div id="expenses-table" className="flex flex-row justify-between px-4 ">
           <div>
             <h1 className="text-xl font-bold mb-4">Expenses Table</h1>
-            <Table />
+            <Table showNotification={showNotification}/>
           </div>
         </div>
 

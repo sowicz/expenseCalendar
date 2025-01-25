@@ -24,7 +24,8 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "csv-writer": "^1.6.0",
-    "dayjs": "^1.11.13"
+    "dayjs": "^1.11.13",
+    "papaparse": "^5.5.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
