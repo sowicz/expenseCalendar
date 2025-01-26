@@ -4,10 +4,11 @@ import "./styleTable.css";
 
 interface NotificationProps {
   showNotification: (message:string) => void;
+  handleEditExpense: (expense: Expense) => void;
 }
 
 
-function Table({showNotification}: NotificationProps): JSX.Element {
+function Table({showNotification, handleEditExpense}: NotificationProps): JSX.Element {
   const [data, setData] = useState<Expense[]>([]);
 
 
@@ -59,7 +60,7 @@ function Table({showNotification}: NotificationProps): JSX.Element {
               <td className="px-4 py-2 text-sm">{data.Amount.toFixed(2)}</td>
               <td className="px-4 py-2 text-sm">{data.StartDate}</td>
               <td className="px-4 py-2 text-sm">{data.Interval}</td>
-              <td className="px-4 py-2 text-sm"><button onClick={()=> logExpense(index)}>Click</button></td>
+              <td className="px-4 py-2 text-sm"><button onClick={()=> handleEditExpense(data)}>Click</button></td>
             </tr>
           ))}
         </tbody>

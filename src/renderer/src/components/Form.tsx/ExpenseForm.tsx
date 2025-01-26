@@ -1,9 +1,11 @@
+import { Expense } from '@renderer/Interfaces';
 import { useState, FormEvent, useEffect } from 'react';
 
 
 
 interface Props {
   showNotification: (msg: string) => void; 
+  editExpense: Expense | null;
   // editExpense: {
   //   Description: string;
   //   Amount: number;
@@ -13,6 +15,7 @@ interface Props {
 }
 
 interface ExpenseToAdd {
+  ID?: string;
   Description: string;
   Amount: number;
   Interval: string;
@@ -20,11 +23,23 @@ interface ExpenseToAdd {
 }
 
 
-function ExpenseForm({ showNotification }: Props): JSX.Element {
+function ExpenseForm({ showNotification, editExpense }: Props): JSX.Element {
   const [description, setDescription] = useState('');
   const [expense, setExpense] = useState('');
   const [choice, setChoice] = useState('yearly');
   const [startDate, setStartDate] = useState('');
+
+
+
+  // Check for edited Expense
+  useEffect(() => {
+    if (editExpense) {
+      setDescription(editExpense.Description);
+      setExpense(editExpense.Amount.toString());
+      setChoice(editExpense.Interval);
+      setStartDate(editExpense.StartDate);
+    }
+  }, [editExpense]);
 
 
 
@@ -37,12 +52,17 @@ function ExpenseForm({ showNotification }: Props): JSX.Element {
     }
 
     try {
+
       const expenseToAdd: ExpenseToAdd = {
         Description: description,
         Amount: parseFloat(expense), // Konwersja do liczby
         Interval: choice,
         StartDate: new Date(startDate) // Konwersja do obiektu Date
       };
+
+      if (editExpense?.ID) {
+        expenseToAdd.ID = editExpense.ID;
+      }
 
       // submitExpense(expenseToAdd); 
       window.electron.ipcRenderer.send("add-expense", expenseToAdd);
@@ -58,6 +78,8 @@ function ExpenseForm({ showNotification }: Props): JSX.Element {
     setStartDate('');
   };
 
+
+
   const handleClear = () => {
     setDescription('');
     setExpense('');
@@ -65,6 +87,8 @@ function ExpenseForm({ showNotification }: Props): JSX.Element {
     setStartDate('');
     showNotification('Form cleared.');
   };
+
+
 
   const handleDelete = () => {
     showNotification('Deleted successfully!');

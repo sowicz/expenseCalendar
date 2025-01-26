@@ -35,6 +35,13 @@ function App(): JSX.Element {
     setMessage(""); 
   };
 
+  const handleEditExpense = (expense): void => {
+    // console.log(expense)
+    setEditExpense(expense)
+    console.log(editExpense)
+
+  }
+
 
   const highlightedDays = [3, 7, 15, 23]; 
 
@@ -49,7 +56,7 @@ function App(): JSX.Element {
         <div id="expenses-table" className="flex flex-row justify-between px-4 ">
           <div>
             <h1 className="text-xl font-bold mb-4">Expenses Table</h1>
-            <Table showNotification={showNotification}/>
+            <Table showNotification={showNotification} handleEditExpense={handleEditExpense}/>
           </div>
         </div>
 
@@ -70,7 +77,7 @@ function App(): JSX.Element {
             />
           </div>
           <div id="expenseForm" className="xl:mr-24 xl:mt-16 mt-4">
-            <ExpenseForm showNotification={showNotification} />
+            <ExpenseForm showNotification={showNotification} editExpense={editExpense}/>
           </div>
         </div>
           {/* Notification Modal */}

@@ -104,8 +104,12 @@ app.whenReady().then(() => {
     );
   }
 
+
   // IPC Linstener
   ipcMain.on("add-expense", async (event, expense) => {
+
+    console.log(expense)
+
     try {
       const expenseWithId = {
         id: randomUUID(),
@@ -114,11 +118,9 @@ app.whenReady().then(() => {
         interval: expense.Interval,
         startDate: expense.StartDate,
       };
-      console.log(expense)
-      console.log(expenseWithId)
 
       await csvWriter.writeRecords([expenseWithId]);
-      console.log("Save expense:", expenseWithId);
+      // console.log("Save expense:", expenseWithId);
 
       event.sender.send("expense-status", { status: "success", message: "Expense saved successfully!" });
     } catch (error) {
