@@ -6,21 +6,12 @@ interface NotificationProps {
 }
 
 interface Expense {
-  expense_description: string;
-  price: number;
-  payment_day: string;
-  interval: string;
+  Description: string;
+  Amount: number;
+  StartDate: string;
+  Interval: string;
 }
 
-
-const expenses = [
-  { 
-    expense_description: 'Electricity bill',
-    price: 120.50,
-    payment_day: 20,
-    interval: 'month',
-  }
-];
 
 function Table({showNotification}: NotificationProps): JSX.Element {
   const [data, setData] = useState<Expense[]>([]);
@@ -30,23 +21,26 @@ function Table({showNotification}: NotificationProps): JSX.Element {
     // Send a request to load CSV data
     window.electron.ipcRenderer.send('request-expenses');
 
-    const handleMessage = (message: string) => {
-      console.log("Received message:", message);
+    const handleMessage = (message) => {
+      if (message.error) {
+        showNotification(message.error);
+        setData([])
+      } else {
+        setData(message);
+      }
     };
 
-    window.electron.ipcRenderer.on('request-expenses', handleMessage);
-    // Listen for the response
-    // window.electron.ipcRenderer.on("send-expenses", (response) => {
-    //   console.log(response)
-    //   // if (response) {
-    //   //   showNotification(response);
-    //   // } else {
-    //   //   setData(response);
-    //   // }
-    // });
 
+    window.electron.ipcRenderer.on("response-expenses", handleMessage);
+    return () => {
+      window.electron.ipcRenderer.on('request-expenses', () => {});
+    }; 
 
   }, []);
+
+  const logExpense = (id) => {
+    console.log(data[id])
+  }
   
 
   return (
@@ -62,15 +56,16 @@ function Table({showNotification}: NotificationProps): JSX.Element {
           </tr>
         </thead>
         <tbody className="bg-white text-gray-700 ">
-          {data.map((item, index) => (
+          {data.map((data, index) => (
             <tr key={index} className="border-t">
               <td className="px-4 py-2 text-sm max-w-[180px] overflow-hidden text-ellipsis break-words">
-                {item.expense_description}
+                {data.Description}
               </td>
-              <td className="px-4 py-2 text-sm">{item.price.toFixed(2)}</td>
-              <td className="px-4 py-2 text-sm">{item.payment_day}</td>
-              <td className="px-4 py-2 text-sm">{item.interval}</td>
-              <td className="px-4 py-2 text-sm">click</td>
+              {/* <td className="px-4 py-2 text-sm">{item.amount.toFixed(2)}</td> */}
+              <td className="px-4 py-2 text-sm">{data.Amount.toFixed(2)}</td>
+              <td className="px-4 py-2 text-sm">{data.StartDate}</td>
+              <td className="px-4 py-2 text-sm">{data.Interval}</td>
+              <td className="px-4 py-2 text-sm"><button onClick={()=> logExpense(index)}>Click</button></td>
             </tr>
           ))}
         </tbody>

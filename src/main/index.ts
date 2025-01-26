@@ -75,7 +75,8 @@ app.whenReady().then(() => {
 
 
   // handle path and logic to save in csv
-  const csvFilePath = path.join(__dirname, './expenses.csv');
+  const csvFilePath = path.join(app.getPath("userData"), "expenses.csv");
+
 
 
   // config `csv-writer`
@@ -85,7 +86,7 @@ app.whenReady().then(() => {
       { id: "description", title: "Description" },
       { id: "amount", title: "Amount" },
       { id: "interval", title: "Interval" },
-      { id: "startDate", title: "Start_date" },
+      { id: "startDate", title: "StartDate" },
     ],
     append: true,
   });
@@ -96,16 +97,14 @@ app.whenReady().then(() => {
   if (!doesCsvExist) {
     fs.writeFileSync(
       csvFilePath,
-      "Description,Amount,Interval,Start Date\n",
+      "Description,Amount,Interval,StartDate\n",
       "utf8"
     );
   }
 
   // IPC Linstener
-  // change "ping" to 'add-expense'
   ipcMain.on("add-expense", async (event, expense) => {
     try {
-      // BACKEND LOGIN TO DO  
       await csvWriter.writeRecords([expense]);
       console.log("Save expense:", expense);
 
@@ -119,13 +118,14 @@ app.whenReady().then(() => {
 
 
   ipcMain.on("request-expenses", (event) => {
-    const csvPath = path.join(__dirname, "./expenses.csv");
+    const csvPath = path.join(app.getPath("userData"), "expenses.csv");
 
     // Load CSV file
     fs.readFile(csvPath, "utf-8", (err, csvData) => {
+ 
       if (err) {
         console.error("Error reading CSV:", err);
-        event.sender.send("request-expenses", { error: "Can't read the CSV file." });
+        event.sender.send("response-expenses", { error: "Can't read the CSV file." });
         return;
       }
 
@@ -138,12 +138,31 @@ app.whenReady().then(() => {
 
       if (parsed.errors.length > 0) {
         console.error("Errors during CSV parsing:", parsed.errors);
-        event.sender.send("request-expenses", { error: "Error parsing the CSV file." });
+        event.sender.send("response-expenses", { error: "Error parsing the CSV file." });
         return;
       }
-  
+
+      const formattedData = parsed.data.map((item) => {
+        if (item.StartDate) {
+          try {
+            // Format the date to YYYY-MM-DD
+            const parsedDate = new Date(item.StartDate);
+            const year = parsedDate.getFullYear();
+            const month = String(parsedDate.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+            const day = String(parsedDate.getDate()).padStart(2, "0");
+            item.StartDate = `${year}-${month}-${day}`;
+          } catch (err) {
+            console.error("Error formatting date:", err);
+          }
+        }
+        return item;
+      });
+      // console.log(parsed.data)
+
       // Send parsed data to the frontend
-      event.sender.send("request-expenses", parsed.data);
+      // event.sender.send("response-expenses", parsed.data);
+      event.sender.send("response-expenses", formattedData);
+
     });
   });
   

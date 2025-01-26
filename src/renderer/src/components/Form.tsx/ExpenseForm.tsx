@@ -1,24 +1,40 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 
 interface Props {
   showNotification: (msg: string) => void; 
-  submitExpense: (expense: ExpenseToAdd) => void; 
+  // submitExpense: (expense: ExpenseToAdd) => void; 
+  // editExpense: {
+  //   Description: string;
+  //   Amount: number;
+  //   Interval: string;
+  //   StartDate: string;
+  // } | null;
 }
 
 interface ExpenseToAdd {
-  description: string;
-  amount: number;
-  interval: string;
-  startDate: Date;
+  Description: string;
+  Amount: number;
+  Interval: string;
+  StartDate: Date;
 }
 
 
-function ExpenseForm({submitExpense, showNotification}: Props): JSX.Element {
+function ExpenseForm({ showNotification }: Props): JSX.Element {
   const [description, setDescription] = useState('');
   const [expense, setExpense] = useState('');
   const [choice, setChoice] = useState('yearly');
   const [startDate, setStartDate] = useState('');
 
+
+    // Update form fields when `selectedRow` changes
+    // useEffect(() => {
+    //   if (editExpense) {
+    //     setDescription(editExpense.Description);
+    //     setExpense(editExpense.Amount.toString());
+    //     setChoice(editExpense.Interval);
+    //     setStartDate(editExpense.StartDate);
+    //   }
+    // }, [editExpense]);
 
 
   const handleSubmit = (e: FormEvent) => {
@@ -31,13 +47,14 @@ function ExpenseForm({submitExpense, showNotification}: Props): JSX.Element {
 
     try {
       const expenseToAdd: ExpenseToAdd = {
-        description,
-        amount: parseFloat(expense), // Konwersja do liczby
-        interval: choice,
-        startDate: new Date(startDate) // Konwersja do obiektu Date
+        Description: description,
+        Amount: parseFloat(expense), // Konwersja do liczby
+        Interval: choice,
+        StartDate: new Date(startDate) // Konwersja do obiektu Date
       };
 
-      submitExpense(expenseToAdd); 
+      // submitExpense(expenseToAdd); 
+      window.electron.ipcRenderer.send("add-expense", expenseToAdd);
       showNotification('Expense submitted successfully!'); 
     } catch (error) {
       showNotification('An error occurred while submitting the expense.');

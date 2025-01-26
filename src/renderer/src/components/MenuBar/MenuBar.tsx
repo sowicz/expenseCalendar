@@ -8,15 +8,12 @@ function MenuBar():JSX.Element {
   const closeRef = useRef('closeWindow')
 
   const handleMinimize = (): void => {
-    console.log(minimizeRef.current);
     window.electron.ipcRenderer.send(minimizeRef.current);
   };
   const handleMaximize = (): void => {
-    console.log(maximizeRef.current);
     window.electron.ipcRenderer.send(maximizeRef.current);
   };
   const handleClose = (): void => {
-    console.log(closeRef.current);
     window.electron.ipcRenderer.send(closeRef.current);
   };
 
@@ -31,7 +28,7 @@ function MenuBar():JSX.Element {
               </svg>
             </button>
             <button className="hover:bg-slate-700 px-4 h-full"  onClick={handleMaximize}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="#335075" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="#335075" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3">
                 </path></g>
               </svg>
             </button>

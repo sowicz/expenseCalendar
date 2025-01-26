@@ -14,28 +14,14 @@ const data  = {
   oneTime: 11
 } 
 
-interface ExpenseToAdd {
-  description: string;
-  amount: number;
-  interval: string;
-  startDate: Date;
-}
 
 
 function App(): JSX.Element {
   const [message, setMessage] = useState<string>('');
   const [notification, setNotification] = useState<boolean>(false);
+  const [editExpense, setEditExpense] = useState(null)
 
 
-  // Backend communication handling
-  const submitExpense = (expense: ExpenseToAdd): void => {
-    try {
-      // console.log(expense)
-      window.electron.ipcRenderer.send("add-expense", expense);
-    } catch (error) {
-      showNotification("An error occurred while adding.");
-    }
-  };
 
 
   // Error/Info message handling
@@ -67,16 +53,13 @@ function App(): JSX.Element {
           </div>
         </div>
 
-        {/* <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-          Send IPC
-        </a> */}
 
         {/* Calendar */}
         <div id="calendar" className="absolute top-2 right-8 2xl:right-32">
           <Calendar highlightedDays={highlightedDays} />
         </div>
 
-        {/*  */}
+        {/* Summary */}
         <div className="flex flex-row w-full justify-between">
           <div id="summary" className="xl:mt-16 mt-4 w-fit">
             <Summary
@@ -87,7 +70,7 @@ function App(): JSX.Element {
             />
           </div>
           <div id="expenseForm" className="xl:mr-24 xl:mt-16 mt-4">
-            <ExpenseForm submitExpense={submitExpense} showNotification={showNotification} />
+            <ExpenseForm showNotification={showNotification} />
           </div>
         </div>
           {/* Notification Modal */}
