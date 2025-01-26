@@ -6,6 +6,7 @@ import Summary from "./components/Summary/Summary";
 import ExpenseForm from "./components/Form.tsx/ExpenseForm";
 import Notification from "./components/Notification";
 
+import { Expense } from "./Interfaces";
 
 const data  = {
   allExpenses: 100,
@@ -15,11 +16,10 @@ const data  = {
 } 
 
 
-
 function App(): JSX.Element {
   const [message, setMessage] = useState<string>('');
   const [notification, setNotification] = useState<boolean>(false);
-  const [editExpense, setEditExpense] = useState(null)
+  const [editExpense, setEditExpense] = useState<Expense | null>(null);
 
 
 

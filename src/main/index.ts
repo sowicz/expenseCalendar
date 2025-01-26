@@ -3,6 +3,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import path,{ join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { createObjectCsvWriter } from "csv-writer";
+import { randomUUID } from 'crypto';
 import fs from "fs";
 import Papa from 'papaparse';
 
@@ -83,6 +84,7 @@ app.whenReady().then(() => {
   const csvWriter = createObjectCsvWriter({
     path: csvFilePath,
     header: [
+      { id: "id", title: "ID" },
       { id: "description", title: "Description" },
       { id: "amount", title: "Amount" },
       { id: "interval", title: "Interval" },
@@ -97,7 +99,7 @@ app.whenReady().then(() => {
   if (!doesCsvExist) {
     fs.writeFileSync(
       csvFilePath,
-      "Description,Amount,Interval,StartDate\n",
+      "ID,Description,Amount,Interval,StartDate\n",
       "utf8"
     );
   }
@@ -105,8 +107,18 @@ app.whenReady().then(() => {
   // IPC Linstener
   ipcMain.on("add-expense", async (event, expense) => {
     try {
-      await csvWriter.writeRecords([expense]);
-      console.log("Save expense:", expense);
+      const expenseWithId = {
+        id: randomUUID(),
+        description: expense.Description,
+        amount: expense.Amount,
+        interval: expense.Interval,
+        startDate: expense.StartDate,
+      };
+      console.log(expense)
+      console.log(expenseWithId)
+
+      await csvWriter.writeRecords([expenseWithId]);
+      console.log("Save expense:", expenseWithId);
 
       event.sender.send("expense-status", { status: "success", message: "Expense saved successfully!" });
     } catch (error) {
@@ -157,10 +169,9 @@ app.whenReady().then(() => {
         }
         return item;
       });
-      // console.log(parsed.data)
+      // console.log(formattedData)
 
       // Send parsed data to the frontend
-      // event.sender.send("response-expenses", parsed.data);
       event.sender.send("response-expenses", formattedData);
 
     });

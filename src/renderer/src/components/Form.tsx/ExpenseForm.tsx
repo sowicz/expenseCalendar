@@ -1,8 +1,9 @@
 import { useState, FormEvent, useEffect } from 'react';
 
+
+
 interface Props {
   showNotification: (msg: string) => void; 
-  // submitExpense: (expense: ExpenseToAdd) => void; 
   // editExpense: {
   //   Description: string;
   //   Amount: number;
@@ -25,16 +26,6 @@ function ExpenseForm({ showNotification }: Props): JSX.Element {
   const [choice, setChoice] = useState('yearly');
   const [startDate, setStartDate] = useState('');
 
-
-    // Update form fields when `selectedRow` changes
-    // useEffect(() => {
-    //   if (editExpense) {
-    //     setDescription(editExpense.Description);
-    //     setExpense(editExpense.Amount.toString());
-    //     setChoice(editExpense.Interval);
-    //     setStartDate(editExpense.StartDate);
-    //   }
-    // }, [editExpense]);
 
 
   const handleSubmit = (e: FormEvent) => {

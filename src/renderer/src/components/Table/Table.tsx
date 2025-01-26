@@ -1,15 +1,9 @@
 import { useState, useEffect } from "react";
+import { Expense } from "@renderer/Interfaces";
 import "./styleTable.css";
 
 interface NotificationProps {
   showNotification: (message:string) => void;
-}
-
-interface Expense {
-  Description: string;
-  Amount: number;
-  StartDate: string;
-  Interval: string;
 }
 
 
