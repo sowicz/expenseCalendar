@@ -107,24 +107,68 @@ app.whenReady().then(() => {
 
   // IPC Linstener
   ipcMain.on("add-expense", async (event, expense) => {
-
+    const csvFilePath = path.join(app.getPath("userData"), "expenses.csv");
+  
     console.log(expense)
-
     try {
-      const expenseWithId = {
-        id: randomUUID(),
-        description: expense.Description,
-        amount: expense.Amount,
-        interval: expense.Interval,
-        startDate: expense.StartDate,
-      };
-
-      await csvWriter.writeRecords([expenseWithId]);
-      // console.log("Save expense:", expenseWithId);
-
-      event.sender.send("expense-status", { status: "success", message: "Expense saved successfully!" });
+      // Read the existing CSV data
+      const csvData = fs.readFileSync(csvFilePath, "utf-8");
+      const parsedData = Papa.parse(csvData, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+      });
+  
+      // Find if the expense ID already exists
+      let updated = false;
+      const updatedData = parsedData.data.map((row: any) => {
+        console.log(row.id)
+        if (row.id === expense.id) {
+          updated = true;
+          return {
+            ...row,
+            Description: expense.Description,
+            Amount: expense.Amount,
+            Interval: expense.Interval,
+            StartDate: expense.StartDate,
+          };
+        }
+        return row;
+      });
+  
+      if (updated) {
+        // Update the CSV file with the modified data
+        const csvString = Papa.unparse(updatedData, { header: true });
+        fs.writeFileSync(csvFilePath, csvString, "utf-8");
+        event.sender.send("expense-status", {
+          status: "success",
+          message: "Expense updated successfully!",
+        });
+      } else {
+        // Add a new expense if ID doesn't exist
+        const newExpense = {
+          id: randomUUID(),
+          Description: expense.Description,
+          Amount: expense.Amount,
+          Interval: expense.Interval,
+          StartDate: expense.StartDate,
+        };
+  
+        const csvString = Papa.unparse([...parsedData.data, newExpense], {
+          header: true,
+        });
+        fs.writeFileSync(csvFilePath, csvString, "utf-8");
+        event.sender.send("expense-status", {
+          status: "success",
+          message: "Expense added successfully!",
+        });
+      }
     } catch (error) {
-      event.sender.send("expense-status", { status: "error", message: "Failed to save expense." });
+      console.error("Error handling expense:", error);
+      event.sender.send("expense-status", {
+        status: "error",
+        message: "Failed to process expense.",
+      });
     }
   });
 

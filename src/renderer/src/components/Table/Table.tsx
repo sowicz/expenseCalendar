@@ -21,6 +21,7 @@ function Table({showNotification, handleEditExpense}: NotificationProps): JSX.El
         showNotification(message.error);
         setData([])
       } else {
+        console.log(message)
         setData(message);
       }
     };
@@ -33,9 +34,6 @@ function Table({showNotification, handleEditExpense}: NotificationProps): JSX.El
 
   }, []);
 
-  const logExpense = (id) => {
-    console.log(data[id])
-  }
   
 
   return (

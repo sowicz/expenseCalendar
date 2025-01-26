@@ -15,7 +15,7 @@ interface Props {
 }
 
 interface ExpenseToAdd {
-  ID?: string;
+  id?: string;
   Description: string;
   Amount: number;
   Interval: string;
@@ -60,8 +60,8 @@ function ExpenseForm({ showNotification, editExpense }: Props): JSX.Element {
         StartDate: new Date(startDate) // Konwersja do obiektu Date
       };
 
-      if (editExpense?.ID) {
-        expenseToAdd.ID = editExpense.ID;
+      if (editExpense?.id) {
+        expenseToAdd.id = editExpense.id;
       }
 
       // submitExpense(expenseToAdd); 
