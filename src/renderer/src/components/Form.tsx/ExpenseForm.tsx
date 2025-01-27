@@ -6,12 +6,7 @@ import { useState, FormEvent, useEffect } from 'react';
 interface Props {
   showNotification: (msg: string) => void; 
   editExpense: Expense | null;
-  // editExpense: {
-  //   Description: string;
-  //   Amount: number;
-  //   Interval: string;
-  //   StartDate: string;
-  // } | null;
+  resetEditExpense: () => void;
 }
 
 interface ExpenseToAdd {
@@ -23,7 +18,8 @@ interface ExpenseToAdd {
 }
 
 
-function ExpenseForm({ showNotification, editExpense }: Props): JSX.Element {
+
+function ExpenseForm({ showNotification, editExpense, resetEditExpense }: Props): JSX.Element {
   const [description, setDescription] = useState('');
   const [expense, setExpense] = useState('');
   const [choice, setChoice] = useState('yearly');
@@ -67,6 +63,7 @@ function ExpenseForm({ showNotification, editExpense }: Props): JSX.Element {
       // submitExpense(expenseToAdd); 
       window.electron.ipcRenderer.send("add-expense", expenseToAdd);
       showNotification('Expense submitted successfully!'); 
+      resetEditExpense();
     } catch (error) {
       showNotification('An error occurred while submitting the expense.');
     }
@@ -85,14 +82,27 @@ function ExpenseForm({ showNotification, editExpense }: Props): JSX.Element {
     setExpense('');
     setChoice('yearly');
     setStartDate('');
+    resetEditExpense();
     showNotification('Form cleared.');
   };
 
+  const handleMessage = (message): void => {
+    if (message.status === "success") {
+      showNotification(message.message);
+    } else {
+      showNotification(message.message);
+    }
 
-
-  const handleDelete = () => {
-    showNotification('Deleted successfully!');
   };
+
+  const handleDelete = (): void => {
+    window.electron.ipcRenderer.send("delete-expense", editExpense?.id);
+    window.electron.ipcRenderer.on("delete-status", handleMessage);
+  };
+
+
+
+
 
 
   return (

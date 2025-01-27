@@ -140,7 +140,7 @@ app.whenReady().then(() => {
         // Update the CSV file with the modified data
         const csvString = Papa.unparse(updatedData, { header: true });
         fs.writeFileSync(csvFilePath, csvString, "utf-8");
-        event.sender.send("expense-status", {
+        event.sender.send("add-status", {
           status: "success",
           message: "Expense updated successfully!",
         });
@@ -158,14 +158,14 @@ app.whenReady().then(() => {
           header: true,
         });
         fs.writeFileSync(csvFilePath, csvString, "utf-8");
-        event.sender.send("expense-status", {
+        event.sender.send("add-status", {
           status: "success",
           message: "Expense added successfully!",
         });
       }
     } catch (error) {
       console.error("Error handling expense:", error);
-      event.sender.send("expense-status", {
+      event.sender.send("add-status", {
         status: "error",
         message: "Failed to process expense.",
       });
@@ -195,8 +195,8 @@ app.whenReady().then(() => {
       });
 
       if (parsed.errors.length > 0) {
-        console.error("Errors during CSV parsing:", parsed.errors);
-        event.sender.send("response-expenses", { error: "Error parsing the CSV file." });
+        // console.error("Errors during CSV parsing:", parsed.errors);
+        event.sender.send("response-expenses", { error: "Error loading CSV file - might be empty." });
         return;
       }
 
@@ -223,6 +223,51 @@ app.whenReady().then(() => {
     });
   });
   
+
+  
+  ipcMain.on("delete-expense", (event, id) => {
+    const csvFilePath = path.join(app.getPath("userData"), "expenses.csv");
+  
+    try {
+      // Read the existing CSV data
+      const csvData = fs.readFileSync(csvFilePath, "utf-8");
+      const parsedData = Papa.parse(csvData, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+      });
+  
+      // Check if an expense with the given ID exists
+      const filteredData = parsedData.data.filter((row: any) => row.id !== id);
+  
+      if (filteredData.length === parsedData.data.length) {
+        // If no matching ID is found, notify the user
+        event.sender.send("delete-status", {
+          status: "error",
+          message: `Expense not found, please reload application`,
+        });
+        return;
+      }
+  
+      // Write the updated data back to the CSV file
+      const csvString = Papa.unparse(filteredData, { header: true });
+      fs.writeFileSync(csvFilePath, csvString, "utf-8");
+  
+      // Notify the frontend about the successful deletion
+      event.sender.send("delete-status", {
+        status: "success",
+        message: `Expense deleted successfully.`,
+      });
+    } catch (error) {
+      console.error("Error deleting expense:", error);
+  
+      // Notify the frontend about the error
+      event.sender.send("delete-status", {
+        status: "error",
+        message: "Failed to delete expense.",
+      });
+    }
+  });
 
 
 

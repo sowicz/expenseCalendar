@@ -77,7 +77,11 @@ function App(): JSX.Element {
             />
           </div>
           <div id="expenseForm" className="xl:mr-24 xl:mt-16 mt-4">
-            <ExpenseForm showNotification={showNotification} editExpense={editExpense}/>
+            <ExpenseForm 
+              showNotification={showNotification} 
+              editExpense={editExpense}
+              resetEditExpense={() => setEditExpense(null)}
+            />
           </div>
         </div>
           {/* Notification Modal */}
