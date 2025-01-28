@@ -22,7 +22,6 @@ function Table({showNotification, handleEditExpense}: NotificationProps): JSX.El
     };
     const handleMessage = (message) => {
       if (message.error) {
-        // showNotification(message.error);
         setData([]);
       } else {
         setData(message);

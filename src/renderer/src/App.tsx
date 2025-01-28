@@ -8,12 +8,6 @@ import Notification from "./components/Notification";
 
 import { Expense } from "./Interfaces";
 
-const data  = {
-  allExpenses: 100,
-  yearly: 29.99,
-  monthly: 99.1,
-  oneTime: 11
-} 
 
 
 function App(): JSX.Element {
@@ -69,12 +63,7 @@ function App(): JSX.Element {
         {/* Summary */}
         <div className="flex flex-row w-full justify-between">
           <div id="summary" className="xl:mt-16 mt-4 w-fit">
-            <Summary
-              allExpenses={data.allExpenses}
-              yearly={data.yearly}
-              monthly={data.monthly}
-              oneTime={data.oneTime}
-            />
+            <Summary />
           </div>
           <div id="expenseForm" className="xl:mr-24 xl:mt-16 mt-4">
             <ExpenseForm 

@@ -7,6 +7,9 @@ import { randomUUID } from 'crypto';
 import fs from "fs";
 import Papa from 'papaparse';
 
+// functions
+import calculateExpenses from "./expenseSummary";
+
 // assets
 import icon from '../../resources/icon.png?asset'
 
@@ -266,6 +269,16 @@ app.whenReady().then(() => {
         status: "error",
         message: "Failed to delete expense.",
       });
+    }
+  });
+
+
+  ipcMain.on("calculate-expenses", async (event) => {
+    try {
+      const expenses = await calculateExpenses();
+      event.reply("calculate-expenses-response", expenses);
+    } catch (error) {
+      event.reply("calculate-expenses-response", { error: "Failed to calculate expenses." });
     }
   });
 
