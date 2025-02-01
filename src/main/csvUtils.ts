@@ -38,6 +38,11 @@ export function loadCsvData(filePath: string): any {
       throw new Error('Error parsing CSV data');
     }
 
+    // If no data is found, return an empty array
+    if (!Array.isArray(parsedData.data)) {
+      return [];
+    }
+
     const formattedData = parsedData.data.map((item) => {
       if (item.StartDate) {
         try {
@@ -53,11 +58,13 @@ export function loadCsvData(filePath: string): any {
       }
       return item;
     });
-    return formattedData
+
+    return formattedData;
   } catch (error) {
     return { error: "Can't read the CSV file." };
   }
 }
+
 
 export function addOrUpdateExpense(filePath: string, expense: any): any {
   const csvData = loadCsvData(filePath);
@@ -99,8 +106,8 @@ export function deleteExpense(filePath: string, id: string): any {
 export function getFormattedExpenses(filePath: string) {
   const csvData = loadCsvData(filePath);
 
-  if (!Array.isArray(csvData)) {
-    return { error: "Invalid CSV data format." };
+  if (!Array.isArray(csvData) || csvData.length === 0) {
+    return { error: "No expenses found." };
   }
 
   const expenses = {
@@ -115,10 +122,7 @@ export function getFormattedExpenses(filePath: string) {
 
     if (!StartDate || !Interval) return;
 
-    // const [year, month, day] = StartDate.split("-");
-
     if (Interval === "yearly") {
-      // expenses.yearly.push(`${month}-${day}`);
       expenses.yearly.push(StartDate);
     } else if (Interval === "monthly") {
       expenses.monthly.push(StartDate);
