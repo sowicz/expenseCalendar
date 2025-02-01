@@ -9,8 +9,7 @@ interface NotificationProps {
 
 
 
-
-function Table({showNotification, handleEditExpense}: NotificationProps): JSX.Element {
+function Table({ handleEditExpense}: NotificationProps): JSX.Element {
   const [data, setData] = useState<Expense[]>([]);
 
   
