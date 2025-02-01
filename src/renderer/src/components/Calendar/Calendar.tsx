@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import ShowMonth from "./ShowMonth";
 
+
 const nameOfDays: string[] = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
+
 
 function Calendar(): JSX.Element {
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
@@ -16,6 +18,7 @@ function Calendar(): JSX.Element {
   const firstDayOfMonth = currentDate.startOf("month").day();
   const monthName = currentDate.format("MMMM YYYY");
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
 
   const handlePrevMonth = () => setCurrentDate(currentDate.subtract(1, "month"));
   const handleNextMonth = () => setCurrentDate(currentDate.add(1, "month"));
@@ -43,11 +46,10 @@ function Calendar(): JSX.Element {
 
   const parseYearlyArray = (arr: string[]): number[] => {
     return arr
-      .map(dateStr => dateStr.split("-")) // Convert "YYYY-MM-DD" to ["YYYY", "MM", "DD"]
+      .map(dateStr => dateStr.split("-"))
       .filter(([_, month]) => 
-        parseInt(month, 10) === currentDate.month() + 1 // ✅ Match month, ignore year
-      )
-      .map(([_, __, day]) => parseInt(day, 10)); // Extract day as number
+        parseInt(month, 10) === currentDate.month() + 1)
+      .map(([_, __, day]) => parseInt(day, 10));
   };
   
   
