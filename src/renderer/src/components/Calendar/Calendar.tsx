@@ -37,8 +37,8 @@ function Calendar(): JSX.Element {
     return arr
       .map(dateStr => dateStr.split("-"))
       .filter(([year, month]) => 
-        parseInt(year, 10) === currentDate.year() &&  // ✅ Match year
-        parseInt(month, 10) === currentDate.month() + 1 // ✅ Match month
+        parseInt(year, 10) === currentDate.year() &&
+        parseInt(month, 10) === currentDate.month() + 1 
       )
       .map(([_, __, day]) => parseInt(day, 10));
   };
@@ -111,10 +111,10 @@ function Calendar(): JSX.Element {
               key={day}
               className={`flex items-center justify-center p-2 rounded-md
                 ${
-                  isMonthlyExpense ? "bg-blue-500 text-white" :
-                  isOneTimeExpense ? "bg-green-500 text-white" :
-                  isYearlyExpense ? "bg-yellow-500 text-white" :
-                  "bg-gray-100 text-gray-900"
+                  isMonthlyExpense ? "bg-blue-300 text-white" :
+                  isOneTimeExpense ? "bg-green-300 text-white" :
+                  isYearlyExpense ? "bg-yellow-300 text-white" :
+                  "bg-gray-800 text-gray-200"
                 }`}
               >
               {day}

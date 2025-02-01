@@ -54,9 +54,9 @@ function Table({showNotification, handleEditExpense}: NotificationProps): JSX.El
   
 
   return (
-    <div className="overflow-x-auto scrollbar-container border border-white bg-white  shadow-md h-[240px] max-h-[240px] xl:max-w-[900px] max-w-[540px] xl:w-[900px] overflow-y-auto ">
+    <div className="overflow-x-auto scrollbar-container h-[240px] max-h-[240px] xl:max-w-[900px] max-w-[540px] xl:w-[900px] overflow-y-auto ">
       <table className="min-w-full table-auto ">
-        <thead className="bg-gray-100 text-gray-800 sticky top-0">
+        <thead className="bg-gray-300 text-gray-800 sticky top-0">
           <tr>
             <th className="px-4 py-2 text-left text-sm font-semibold max-w-[180px]">Description</th>
             <th className="px-4 py-2 text-left text-sm font-semibold min-w-[60px]">Price</th>
@@ -65,9 +65,9 @@ function Table({showNotification, handleEditExpense}: NotificationProps): JSX.El
             <th className="px-4 py-2 text-left text-sm font-semibold min-w-[50px]">Edit</th>
           </tr>
         </thead>
-        <tbody className="bg-white text-gray-700 ">
+        <tbody className=" text-gray-400 ">
           {data.map((data) => (
-            <tr key={data.id} className="border-t">
+            <tr key={data.id} className="border-b">
               <td className="px-4 py-2 text-sm max-w-[180px] overflow-hidden text-ellipsis break-words">
                 {data.Description}
               </td>

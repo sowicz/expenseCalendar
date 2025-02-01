@@ -106,7 +106,7 @@ function ExpenseForm({ showNotification, editExpense, resetEditExpense }: Props)
 
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 rounded shadow-md max-w-md mx-auto">
+    <form onSubmit={handleSubmit} className="space-y-4 p-4 rounded max-w-md mx-auto">
       <div>
         <label htmlFor="description" className="block text-xl font-bold">
           Description
@@ -116,7 +116,7 @@ function ExpenseForm({ showNotification, editExpense, resetEditExpense }: Props)
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="mt-2 w-full p-2 border rounded text-slate-700"
+          className="mt-2 w-full p-2 border rounded border-gray-600 text-slate-300 bg-gray-800"
           placeholder="Enter expense description"
         />
       </div>
@@ -131,7 +131,7 @@ function ExpenseForm({ showNotification, editExpense, resetEditExpense }: Props)
             type="number"
             value={expense}
             onChange={(e) => setExpense(e.target.value)}
-            className="mt-2 p-2 border rounded w-[100px] text-slate-700"
+            className="mt-2 p-2 border rounded w-[100px] border-gray-600 text-slate-300 bg-gray-800"
             placeholder="Amount"
           />
         </div>
@@ -144,7 +144,7 @@ function ExpenseForm({ showNotification, editExpense, resetEditExpense }: Props)
             id="choice"
             value={choice}
             onChange={(e) => setChoice(e.target.value)}
-            className="mt-2 w-full p-2 border rounded text-slate-700"
+            className="mt-2 w-full p-2 border rounded border-gray-600 text-slate-300 bg-gray-800"
           >
             <option value="yearly">Yearly</option>
             <option value="monthly">Monthly</option>
@@ -161,7 +161,7 @@ function ExpenseForm({ showNotification, editExpense, resetEditExpense }: Props)
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="mt-2 w-full p-2 border rounded text-slate-700"
+            className="mt-2 w-full p-2 border rounded border-gray-600 text-slate-300 bg-gray-800"
           />
         </div>
       </div>
@@ -169,7 +169,7 @@ function ExpenseForm({ showNotification, editExpense, resetEditExpense }: Props)
       <div className="flex justify-between">
         <button
           type="submit"
-          className="w-3/5 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className="w-3/5 bg-blue-900 text-white p-2 rounded hover:bg-blue-600"
         >
           Submit
         </button>

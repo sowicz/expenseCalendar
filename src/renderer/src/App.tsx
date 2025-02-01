@@ -42,7 +42,7 @@ function App(): JSX.Element {
     <>
 
       <MenuBar />
-      <div className="relative w-screen h-screen px-4 py-4">
+      <div className="relative w-screen h-screen px-4 py-4 bg-dark-glow">
 
         {/* Expenses Table */}
         <div id="expenses-table" className="flex flex-row justify-between px-4 ">

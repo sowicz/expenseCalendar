@@ -1,6 +1,6 @@
 .scrollbar-container {
   scrollbar-width: thin;
-  scrollbar-color: #d1d5db white; 
+  overflow-x: hidden;
 }
 
 .scrollbar-container::-webkit-scrollbar {
