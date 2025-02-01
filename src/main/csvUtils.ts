@@ -3,6 +3,8 @@ import Papa from 'papaparse';
 import { randomUUID } from 'crypto';
 import { createObjectCsvWriter } from 'csv-writer';
 
+
+
 export function createCsvWriterInstance(filePath: string) {
   return createObjectCsvWriter({
     path: filePath,
@@ -91,4 +93,39 @@ export function deleteExpense(filePath: string, id: string): any {
   fs.writeFileSync(filePath, csvString, 'utf-8');
 
   return { status: 'success', message: 'Expense deleted successfully.' };
+}
+
+
+export function getFormattedExpenses(filePath: string) {
+  const csvData = loadCsvData(filePath);
+
+  if (!Array.isArray(csvData)) {
+    return { error: "Invalid CSV data format." };
+  }
+
+  const expenses = {
+    allExpenses: csvData.length,
+    yearly: [] as string[],  // Format: ["MM-DD", ...]
+    monthly: [] as string[], // Format: ["DD", ...]
+    oneTime: [] as string[], // Format: ["YYYY-MM-DD", ...]
+  };
+
+  csvData.forEach((item) => {
+    const { StartDate, Interval } = item;
+
+    if (!StartDate || !Interval) return;
+
+    // const [year, month, day] = StartDate.split("-");
+
+    if (Interval === "yearly") {
+      // expenses.yearly.push(`${month}-${day}`);
+      expenses.yearly.push(StartDate);
+    } else if (Interval === "monthly") {
+      expenses.monthly.push(StartDate);
+    } else if (Interval === "onetime") {
+      expenses.oneTime.push(StartDate);
+    }
+  });
+
+  return expenses;
 }

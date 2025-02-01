@@ -1,5 +1,5 @@
 import { ipcMain, app } from 'electron';
-import { initializeCsvFile, addOrUpdateExpense, loadCsvData, deleteExpense } from './csvUtils';
+import { initializeCsvFile, addOrUpdateExpense, loadCsvData, deleteExpense, getFormattedExpenses } from './csvUtils';
 import path from 'path';
 
 import calculateExpenses from './expenseSummary';
@@ -45,4 +45,16 @@ export function initializeIpcHandlers(): void {
       event.reply('calculate-expenses-response', { error: 'Failed to calculate expenses.' });
     }
   });
+
+
+
+  ipcMain.on("get-expenses", async (event) => {
+    try {
+      const expenses = getFormattedExpenses(csvFilePath);
+      event.reply("get-expenses-response", expenses);
+    } catch (error) {
+      event.reply("get-expenses-response", { error: "Failed to retrieve expenses." });
+    }
+  });
+
 }

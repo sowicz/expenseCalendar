@@ -37,8 +37,6 @@ function App(): JSX.Element {
   }
 
 
-  const highlightedDays = [3, 7, 15, 23]; 
-
 
   return (
     <>
@@ -57,7 +55,7 @@ function App(): JSX.Element {
 
         {/* Calendar */}
         <div id="calendar" className="absolute top-2 right-8 2xl:right-32">
-          <Calendar highlightedDays={highlightedDays} />
+          <Calendar />
         </div>
 
         {/* Summary */}
