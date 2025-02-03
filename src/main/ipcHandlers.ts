@@ -22,11 +22,13 @@ export function initializeIpcHandlers(): void {
     }
   });
 
+
   ipcMain.on('request-expenses', (event) => {
     const csvData = loadCsvData(csvFilePath);
     event.sender.send('response-expenses', csvData);
   });
 
+  
   ipcMain.on('delete-expense', (event, id) => {
     try {
       const result = deleteExpense(csvFilePath, id);
@@ -36,6 +38,7 @@ export function initializeIpcHandlers(): void {
       event.sender.send('delete-status', { status: 'error', message: 'Failed to delete expense.' });
     }
   });
+
 
   ipcMain.on('calculate-expenses', async (event) => {
     try {

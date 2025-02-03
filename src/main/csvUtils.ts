@@ -19,11 +19,13 @@ export function createCsvWriterInstance(filePath: string) {
   });
 }
 
+
 export function initializeCsvFile(filePath: string): void {
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, 'ID,Description,Amount,Interval,StartDate\n', 'utf8');
   }
 }
+
 
 export function loadCsvData(filePath: string): any {
   try {
@@ -88,6 +90,7 @@ export function addOrUpdateExpense(filePath: string, expense: any): any {
   return { status: 'success', message: updated ? 'Expense updated successfully!' : 'Expense added successfully!' };
 }
 
+
 export function deleteExpense(filePath: string, id: string): any {
   const csvData = loadCsvData(filePath);
   const filteredData = csvData.filter((row: any) => row.id !== id);
@@ -96,7 +99,14 @@ export function deleteExpense(filePath: string, id: string): any {
     return { status: 'error', message: 'Expense not found.' };
   }
 
-  const csvString = Papa.unparse(filteredData, { header: true });
+  let csvString;
+  if (filteredData.length === 0) {
+    // Jeśli nie ma żadnych danych, zapisz tylko nagłówki
+    csvString = 'ID,Description,Amount,Interval,StartDate\n';
+  } else {
+    csvString = Papa.unparse(filteredData, { header: true });
+  }
+
   fs.writeFileSync(filePath, csvString, 'utf-8');
 
   return { status: 'success', message: 'Expense deleted successfully.' };
